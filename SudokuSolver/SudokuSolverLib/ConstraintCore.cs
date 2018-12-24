@@ -244,6 +244,42 @@ namespace SudokuSolverLib
             }
         }
 
+        public bool FindRow(int rowIndex, int layerIndex)
+        {
+            int cpt = 0;
+            int ite = 0;
+            while (cpt <= 1 && ite < this.Size)
+            {
+                if (this.Core[layerIndex, rowIndex, ite] == Constraint.Unknown)
+                {
+                    cpt++;
+                }
+                ite++;
+            }
+
+            return cpt == 1;
+        }
+
+        public bool FindColumn(int columnIndex, int layerIndex)
+        {
+            int cpt = 0;
+            int ite = 0;
+            while (cpt <= 1 && ite < this.Size)
+            {
+                if (this.Core[layerIndex, ite, columnIndex] == Constraint.Unknown)
+                {
+                    cpt++;
+                }
+                ite++;
+            }
+
+            return cpt == 1;
+        }
+
+        public bool FindSquare()
+        {
+
+        }
 
         private bool SetValue(int rowIndex, int columnIndex, int value)
         {
