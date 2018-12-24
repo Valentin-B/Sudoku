@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using SudokuSolverLib;
@@ -35,11 +34,17 @@ namespace UnitTestSudokuSolverLib
             }
         }
 
+        private void CheckCoreLayer(Constraint[,] expectedLayer, ConstraintCore constraintCoreToCheck, int layerIndex)
+        {
+            CheckLayer(constraintCoreToCheck.Size, expectedLayer, constraintCoreToCheck.Core, layerIndex);
+        }
+
 
         [TestMethod]
+        [Description("Check nominal case when setting a value")]
         public void TestSetSuccess()
         {
-            ConstraintCore target = new ConstraintCore();
+            ConstraintCore target = new ConstraintCore(9);
 
             int[,] expectedGrid = new int[,]
             {
@@ -189,33 +194,55 @@ namespace UnitTestSudokuSolverLib
         }
 
         [TestMethod]
+        [Description("Detect Row constraint violation")]
         public void TestSetFail_RowViolation()
         {
-            ConstraintCore target = new ConstraintCore();
+            ConstraintCore target = new ConstraintCore(9);
             Assert.IsTrue(target.Set(5, 0, 1, true), "Failed to init first value in empty Core");
             Assert.IsFalse(target.Set(5, 5, 1, true));
             Assert.IsFalse(target.Set(5, 8, 1, true));
             Assert.AreEqual(80, target.LeftCell);
+
+            //target = new ConstraintCore(25);
+            //Assert.IsTrue(target.Set(5, 0, 1, true), "Failed to init first value in empty Core");
+            //Assert.IsFalse(target.Set(5, 16, 1, true));
+            //Assert.IsFalse(target.Set(5, 23, 1, true));
+            //// 25 * 25 - 1 = 624
+            //Assert.AreEqual(624, target.LeftCell);
         }
 
         [TestMethod]
+        [Description("Detect Column constraint violation")]
         public void TestSetFail_ColumnViolation()
         {
-            ConstraintCore target = new ConstraintCore();
+            ConstraintCore target = new ConstraintCore(9);
             Assert.IsTrue(target.Set(0, 5, 1, true), "Failed to init first value in empty Core");
             Assert.IsFalse(target.Set(5, 5, 1, true));
             Assert.IsFalse(target.Set(8, 5, 1, true));
             Assert.AreEqual(80, target.LeftCell);
+
+            //target = new ConstraintCore(25);
+            //Assert.IsTrue(target.Set(0, 5, 1, true), "Failed to init first value in empty Core");
+            //Assert.IsFalse(target.Set(16, 5, 1, true));
+            //Assert.IsFalse(target.Set(23, 5, 1, true));
+            //// 25 * 25 - 1 = 624
+            //Assert.AreEqual(624, target.LeftCell);
         }
 
         [TestMethod]
+        [Description("Detect Square constraint violation")]
         public void TestSetFail_SquareViolation()
         {
-            ConstraintCore target = new ConstraintCore();
+            ConstraintCore target = new ConstraintCore(9);
             Assert.IsTrue(target.Set(0, 0, 1, true), "Failed to init first value in empty Core");
             Assert.IsFalse(target.Set(1, 1, 1, true));
             Assert.IsFalse(target.Set(2, 2, 1, true));
             Assert.AreEqual(80, target.LeftCell);
+
+            //target = new ConstraintCore(4);
+            //Assert.IsTrue(target.Set(0, 0, 1, true), "Failed to init first value in empty Core");
+            //Assert.IsFalse(target.Set(1, 1, 1, true));
+            //Assert.AreEqual(15, target.LeftCell);
         }
 
         [TestMethod]
@@ -231,7 +258,7 @@ namespace UnitTestSudokuSolverLib
                 new Step(6,5,5)
             };
 
-            ConstraintCore target = new ConstraintCore();
+            ConstraintCore target = new ConstraintCore(9);
             Assert.IsTrue(target.Set(0, 0, 1, true));
             Assert.IsTrue(target.Set(1, 1, 2, true));
             Assert.IsTrue(target.Set(2, 2, 3, true));

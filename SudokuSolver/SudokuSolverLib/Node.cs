@@ -29,7 +29,7 @@ namespace SudokuSolverLib
 
         public Node()
         {
-            constraintCore = new ConstraintCore();
+            constraintCore = new ConstraintCore(9);
             Parent = null;
         }
 

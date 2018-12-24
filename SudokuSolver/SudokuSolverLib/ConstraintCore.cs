@@ -1,11 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Data;
-using System.Diagnostics;
-using System.Linq;
-using System.Security.Policy;
-using System.Text;
-using System.Threading.Tasks;
 using SudokuSolverLib.Tools;
 
 namespace SudokuSolverLib
@@ -71,23 +65,29 @@ namespace SudokuSolverLib
 
         public List<Step> Steps { get; private set; }
 
-        public ConstraintCore()
+        //public ConstraintCore() : this(9)
+        //{
+        //    //ConstraintCore(9);
+        //}
+
+        private bool SqrtIsInt(int length)
         {
-            size = 9;
-            LeftCell = 81;
-            Core = InitializeCore();
-            Grid = InitializeGrids(0);
-            PossibilityGrid = InitializeGrids(9);
-            Steps = new List<Step>();
+            double size = Math.Sqrt(length);
+            return Math.Abs(size % 1.0) <= 0;
         }
 
-        public ConstraintCore(int desiredSize)
+        public ConstraintCore(int selectedLength)
         {
-            size = desiredSize;
-            LeftCell = 81;
+            if (!SqrtIsInt(selectedLength))
+            {
+                throw new ArgumentException(message: "Square root of the length is a decimal value", paramName: nameof(selectedLength));
+            }
+
+            size = selectedLength;
+            LeftCell = size * size;
             Core = InitializeCore();
             Grid = InitializeGrids(0);
-            PossibilityGrid = InitializeGrids(9);
+            PossibilityGrid = InitializeGrids(size);
             Steps = new List<Step>();
         }
 
